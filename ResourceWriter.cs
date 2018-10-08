@@ -43,7 +43,8 @@ namespace Solidoc
 
             foreach (var item in result)
             {
-                resources.Add($"\t\t/// <summary>{Environment.NewLine}\t\t/// Returns localized string for \"{item.Value}\"{Environment.NewLine}\t\t/// </summary>{Environment.NewLine}\t\tpublic static string {item.Key} => Resource[\"{item.Key}\"];");
+                string resource = $"\t\t/// <summary>{Environment.NewLine}\t\t/// Returns localized string for \"{item.Value}\"{Environment.NewLine}\t\t/// </summary>{Environment.NewLine}\t\tpublic static string {item.Key} => Resource[\"{item.Key}\"];";
+                resources.Add(resource.Replace("\t", string.Join("", Enumerable.Repeat(" ", 4))));
             }
 
             if (!resources.Any())

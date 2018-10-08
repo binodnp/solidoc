@@ -54,6 +54,11 @@ namespace Solidoc.Builders
 
                     builder.Append(Environment.NewLine);
                 }
+                
+                if(!groups.LastOrDefault().Equals(group))
+                {
+                    builder.Append(Environment.NewLine);
+                }
             }
 
 

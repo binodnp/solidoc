@@ -24,8 +24,10 @@ namespace Solidoc.Serializers
 
 
             var dependencies = NodeHelper.GetBaseContracts(contract) ?? new List<Node>();
+            var implementations = NodeHelper.GetImplementations(contract, contracts) ?? new List<Contract>();
 
             var dependencyList = dependencies.Select(dependency => $"[{dependency.BaseName.Name}]({dependency.BaseName.Name}.md)").ToList();
+            var implementationList = implementations.Select(implementation => $"[{implementation.ContractName}]({implementation.ContractName}.md)").ToList();
 
 
             string title = $"{contract.ContractName}.sol";
@@ -36,23 +38,28 @@ namespace Solidoc.Serializers
             }
 
 
-            string contractInheritencePath = string.Empty;
+            string contractInheritancePath = string.Empty;
+            string contractImplementations = string.Empty;
 
             if (dependencyList.Any())
             {
-                contractInheritencePath = $"**contract {contractName} is {string.Join(", ", dependencyList)}**";
+                contractInheritancePath = $"**{string.Format(I18N.Extends, string.Join(", ", dependencyList))}**";
             }
 
+            if (implementationList.Any())
+            {
+                contractImplementations = string.Join("", "**", string.Format(I18N.DerivedContracts, string.Join(", ", implementationList)), "**.");
+            }
 
             template = template.Replace("{{ContractName}}", contractName);
             template = template.Replace("{{ContractTitle}}", title);
             template = template.Replace("{{ContractDescription}}", notice);
-            template = template.Replace("{{ContractInheritencePath}}", contractInheritencePath);
+            template = template.Replace("{{ContractInheritancePath}}", contractInheritancePath);
+            template = template.Replace("{{ContractImplementations}}", contractImplementations);
 
 
             template = template.Replace("{{AllContractsAnchor}}", string.Join(Environment.NewLine, anchors));
             template = template.Replace("{{ABI}}", JsonConvert.SerializeObject(contract.Abi, Formatting.Indented));
-
 
             var builder = new ConstructorBuilder(contract);
             return builder.Build(template);

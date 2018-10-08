@@ -34,6 +34,79 @@ namespace Solidoc.Utility
             return new Node();
         }
 
+        public static IEnumerable<int> GetOverriddenFunctions(IEnumerable<Contract> contracts, int super)
+        {
+            yield return super;
+
+            foreach(var contract in contracts)
+            {
+                foreach(var node in contract.Ast.Nodes)
+                {
+                    if (node.SuperFunction.HasValue && node.SuperFunction.Value == super)
+                    {
+                        yield return node.Id.Value;
+
+                        foreach(var found in GetOverriddenFunctions(contracts, node.Id.Value))
+                        {
+                            yield return found;
+                        }
+                    }
+
+                    if (node.Nodes != null && node.Nodes.Any())
+                    {                   
+                        foreach(var child in node.Nodes)
+                        {
+                            if (child.SuperFunction.HasValue && child.SuperFunction.Value == super)
+                            {
+                                yield return child.Id.Value;
+
+                                foreach(var found in GetOverriddenFunctions(contracts, child.Id.Value))
+                                {
+                                    yield return found;
+                                }
+                            }                            
+                        }     
+                    }
+                }
+            }
+        }
+
+        public static IEnumerable<NodeResult> FindOverriddenNodesById(this IEnumerable<Contract> contracts, int id)
+        {
+            var tree = GetOverriddenFunctions(contracts, id);
+
+            foreach(var contract in contracts)
+            {
+                foreach(var node in FindOverriddenNodesById(contract.Ast.Nodes, tree))
+                {
+                    yield return new NodeResult 
+                    {
+                        Contract = contract,
+                        Node = node
+                    };
+                }
+            }
+        }
+
+        public static IEnumerable<Node> FindOverriddenNodesById(this IEnumerable<Node> nodes, IEnumerable<int> super)
+        {
+            foreach (var node in nodes)
+            {
+                if (node.SuperFunction.HasValue && super.Contains(node.SuperFunction.Value))
+                {
+                    yield return node;
+                }
+
+                if (node.Nodes != null && node.Nodes.Any())
+                {
+                    foreach(var found in node.Nodes.FindOverriddenNodesById(super))
+                    {
+                        yield return found;
+                    }
+                }
+            }           
+        }
+
         public static Node FindNodeById(this IEnumerable<Node> nodes, int id)
         {
             foreach (var node in nodes)
@@ -83,6 +156,24 @@ namespace Solidoc.Utility
                     yield return baseContract;
                 }
             }
+        }
+
+        public static IEnumerable<Contract> GetImplementations(Contract source, IEnumerable<Contract> contracts)
+        {
+            foreach(var contract in contracts)
+            {
+                var node = contract.Ast.Nodes.FirstOrDefault(x => x.BaseContracts != null && x.BaseContracts.Any());
+
+                if(node != null)
+                {
+                    bool hasImplementation = node.BaseContracts.Where(x=>x.BaseName.Name == source.ContractName).Any();
+
+                    if(hasImplementation)
+                    {
+                        yield return contract;
+                    }
+                }
+            };
         }
 
         public static Node GetConstructorNode(Contract contract)

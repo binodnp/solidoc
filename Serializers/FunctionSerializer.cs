@@ -31,11 +31,13 @@ namespace Solidoc.Serializers
                 string description = DocumentationHelper.GetNotice(documentation);
                 var codeBuilder = new FunctionCodeBuilder(node);
                 var superBuilder = new SuperBuilder(node, contracts);
+                var referenceBuilder = new FunctionReferenceBuilder(node, contracts);
 
                 functionTemplate = functionTemplate.Replace("{{FunctionName}}", node.Name);
                 functionTemplate = functionTemplate.Replace("{{FQFunctionName}}", $"{contract.ContractName}.{node.Name}");
                 functionTemplate = functionTemplate.Replace("{{FunctionNameHeading}}", $"### {node.Name}");
                 functionTemplate = functionTemplate.Replace("{{Super}}", superBuilder.Build());
+                functionTemplate = functionTemplate.Replace("{{References}}", referenceBuilder.Build());
                 functionTemplate = functionTemplate.Replace("{{FunctionDescription}}", description);
                 functionTemplate = functionTemplate.Replace("{{FunctionCode}}", codeBuilder.Build());
 

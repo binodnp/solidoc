@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
@@ -38,6 +39,8 @@ namespace Solidoc
 
         private static Contract Parse(string path)
         {
+            Console.WriteLine(I18N.ParsingPath, path);
+            
             var settings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()

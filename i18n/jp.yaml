@@ -13,3 +13,8 @@
 "InvalidDirectory": "無効なディレクトリ - > {0}"
 "WritingPath": "{0}の書き込み"
 "Events": "イベント"
+"DerivedContracts": "↘ Derived Contracts: {0}"
+"References": "References: {0}"
+"Overridden": "Overridden Implementation(s): {0}"
+"Extends": "↗ Extends: {0}"
+"ParsingPath": "Parsing: {0}"

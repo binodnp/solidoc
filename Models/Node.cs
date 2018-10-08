@@ -57,7 +57,7 @@ namespace Solidoc.Models
         public string StorageLocation { get; set; }
         public Node TypeName { get; set; }
 
-        public NodeValue Value { get; set; }
+        public object Value { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public Visibility? Visibility { get; set; }

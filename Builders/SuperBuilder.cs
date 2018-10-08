@@ -38,7 +38,7 @@ namespace Solidoc.Builders
                 break;
             }
 
-            return ":small_red_triangle: " + string.Format(I18N.OverridesSuperFunction, $"[{baseContract.ContractName}.{this.Node.Name}]({baseContract.ContractName}.md#{this.Node.Name.ToLower()})");
+            return "⤾ " + string.Format(I18N.OverridesSuperFunction, $"[{baseContract.ContractName}.{this.Node.Name}]({baseContract.ContractName}.md#{this.Node.Name.ToLower()})");
         }
     }
 }

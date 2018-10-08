@@ -1,6 +1,7 @@
 ﻿# {{ContractTitle}}
 
-{{ContractInheritencePath}}
+{{ContractInheritancePath}}
+{{ContractImplementations}}
 
 
 
