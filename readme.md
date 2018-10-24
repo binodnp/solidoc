@@ -1,4 +1,12 @@
-# Solidoc--Documentation Generator for Solidity
+# Moved to Node
+
+This project is now rewritten in JavaScript.
+
+https://github.com/binodnp/solidoc-js
+
+
+
+## Solidoc--Documentation Generator for Solidity
 
 This command-line utility creates markdown-based documentation for your Solidity projects.
 
