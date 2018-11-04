@@ -2,7 +2,7 @@
 
 This project is now rewritten in JavaScript.
 
-https://github.com/binodnp/solidoc-js
+https://github.com/CYBRToken/solidoc 
 
 
 
